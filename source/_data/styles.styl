@@ -1,0 +1,30 @@
+// Custom styles.
+// 整体背景设置
+body {
+ 	background:url(/images/background.jpeg);// 设定背景图片,images同处于source文件夹下
+ 	background-repeat: no-repeat;// 设定背景图片非重复填充
+    background-attachment:fixed;// 设置背景图片不随页面滚动
+    background-position:50% 50%;// 设置背景图片位置
+	background-size: cover// 设置保持图像的纵横比并将图像缩放成将完全覆盖背景定位区域的最小大小
+}
+
+//博客内容透明化
+//文章内容的透明度设置
+.content-wrap {
+  opacity: 0.9;
+}
+
+//侧边框的透明度设置
+.sidebar {
+  opacity: 0.9;
+}
+
+//菜单栏的透明度设置
+.header-inner {
+  background: rgba(255,255,255,0.9);
+}
+
+//搜索框（local-search）的透明度设置
+.popup {
+  opacity: 0.9;
+}
