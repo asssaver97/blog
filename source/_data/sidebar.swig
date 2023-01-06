@@ -49,6 +49,20 @@
   <div id="sidebar-dimmer"></div>
 {% endmacro %}
 
+{% if site.tags.length > 1 %}
+	<script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+	<script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+	<div class="widget-wrap">
+	    <h3 class="widget-title">标签云</h3>
+	    <div id="myCanvasContainer" class="widget tagcloud">
+	        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+	            {{ list_tags() }}
+	            {{ list_categories() }}
+	        </canvas>
+	    </div>
+	</div>
+{% endif %}
+
 {# recent posts #}
 {% if theme.recent_posts %}
   <div class="links-of-blogroll motion-element {{ "links-of-blogroll-" + theme.recent_posts_layout  }}">
@@ -58,7 +72,7 @@
       {{ theme.recent_posts_title }}
     </div>
     <ul class="links-of-blogroll-list">
-      {% set posts = site.posts.sort('-date') %}
+      {% set posts = site.posts.sort('-date').toArray() %}
       {% for post in posts.slice('0', '5') %}
         <li class="recent_posts_li">
           <a href="{{ url_for(post.path) }}" title="{{ post.title }}" target="_blank">{{ post.title }}</a>
@@ -67,4 +81,3 @@
     </ul>
   </div>
 {% endif %}
-

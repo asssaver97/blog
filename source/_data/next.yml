@@ -125,6 +125,7 @@ menu:
   #schedule: /schedule/ || fa fa-calendar
   #sitemap: /sitemap.xml || fa fa-sitemap
   #commonweal: /404/ || fa fa-heartbeat
+  links: /links/ || fa fa-link
 
 # Enable / Disable menu icons / item badges.
 menu_settings:
@@ -741,7 +742,7 @@ algolia_search:
 # Local Search
 # Dependencies: https://github.com/theme-next/hexo-generator-searchdb
 local_search:
-  enable: false
+  enable: true
   # If auto, trigger search by changing input.
   # If manual, trigger search by pressing enter key or search button.
   trigger: auto
@@ -1011,3 +1012,34 @@ typing_effect:
 recent_posts_title: 近期文章
 recent_posts_layout: block
 recent_posts: true
+
+mylinks:
+
+- nickname: AnFrank  #友链名称
+  site: https://enfangzhong.github.io/  #友链地址
+  info: 既可以早九晚五又可以浪迹天涯。  #友链说明
+  avatar: https://enfangzhong.github.io/images/avatar.jpg  #友链头像
+
+- nickname: 博采众长  #友链名称
+  site: https://lruihao.cn/  #友链地址
+  info: 分享一些有趣程序、干货、技巧、开发教程、心情和学习记录等等。  #友链说明
+  avatar: https://lruihao.cn/images/avatar.png  #友链头像
+
+
+- nickname: Yremp
+  site: https://yremp.live
+  info: 流年，谁给过的倾城
+  avatar: https://cdn.jsdelivr.net/gh/yremp/resource@2.0/img/custom/head.jpg
+  
+- nickname: Leaf's Blog
+  avatar: https://leafjame.github.io/images/beichen.png
+  site: https://leafjame.github.io
+  info: Java狮 北漂男 摄影 旅行 赚钱
+  
+# hexo-tag-cloud
+tag_cloud:
+    textFont: Trebuchet MS, Helvetica
+    textColor: '#333'
+    textHeight: 25
+    outlineColor: '#E2E1D1'
+    maxSpeed: 0.1
