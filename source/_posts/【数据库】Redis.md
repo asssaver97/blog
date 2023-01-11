@@ -1,8 +1,8 @@
 ---
 title: 【数据库】Redis
 date: 2022-03-06 16:45:34
-tags: 八股文
-categories: 数据库
+tags: 数据库
+categories: 八股文
 ---
 Redis 持久化机制
 ---

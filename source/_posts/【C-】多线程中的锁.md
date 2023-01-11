@@ -1,8 +1,7 @@
 ---
 title: 【C++】多线程中的锁
 date: 2022-03-23 13:57:51
-tags: 基础知识
-categories: C++
+tags: C++
 ---
 锁：mutex
 ---

@@ -126,6 +126,7 @@ menu:
   #sitemap: /sitemap.xml || fa fa-sitemap
   #commonweal: /404/ || fa fa-heartbeat
   links: /links/ || fa fa-link
+  love: /love/ || fa fa-heartbeat
 
 # Enable / Disable menu icons / item badges.
 menu_settings:

@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer13.机器人的运动范围
 date: 2022-01-25 12:18:06
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

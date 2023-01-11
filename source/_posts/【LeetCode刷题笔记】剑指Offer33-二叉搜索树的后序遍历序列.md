@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer33.二叉搜索树的后序遍历序列
 date: 2022-01-28 19:26:51
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

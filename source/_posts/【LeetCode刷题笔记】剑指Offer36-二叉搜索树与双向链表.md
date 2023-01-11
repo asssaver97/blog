@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer36.二叉搜索树与双向链表
 date: 2022-01-30 10:20:59
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

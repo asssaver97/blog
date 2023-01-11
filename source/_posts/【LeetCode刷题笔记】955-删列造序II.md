@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】955.删列造序II
 date: 2022-04-18 12:35:46
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

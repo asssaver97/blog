@@ -1,8 +1,8 @@
 ---
-title: 【C++】设计模式
+title: 设计模式
 date: 2022-03-06 15:14:07
-tags: 八股文
-categories: C++
+tags: C++
+categories: 八股文
 ---
 工厂模式(Factory)
 ---

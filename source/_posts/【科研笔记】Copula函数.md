@@ -1,8 +1,8 @@
 ---
 title: 【科研笔记】Copula函数
 date: 2022-04-17 21:30:44
-tags: 科研
-categories: 数学模型
+tags: 数学
+categories: 科研笔记
 ---
 前置知识
 ---

@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】460.LFU缓存
 date: 2022-03-02 15:08:43
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

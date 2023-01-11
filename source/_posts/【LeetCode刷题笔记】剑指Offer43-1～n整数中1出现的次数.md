@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer43.1～n整数中1出现的次数
 date: 2022-02-01 17:49:56
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

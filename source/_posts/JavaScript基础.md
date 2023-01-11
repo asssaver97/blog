@@ -1,8 +1,7 @@
 ---
 title: JavaScript基础
 date: 2022-01-12 17:57:06
-categories: JavaScript
-tags: 基础知识
+tags: JavaScript
 ---
 > **写在前面**
 > + JavaScript 对大小敏感

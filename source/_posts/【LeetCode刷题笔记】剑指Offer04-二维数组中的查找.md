@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer04.二维数组中的查找
 date: 2022-01-24 15:53:08
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

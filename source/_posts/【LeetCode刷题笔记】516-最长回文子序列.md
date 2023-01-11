@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】516.最长回文子序列
 date: 2022-02-27 11:39:41
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

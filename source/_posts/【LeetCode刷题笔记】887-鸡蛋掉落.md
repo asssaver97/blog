@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】887.鸡蛋掉落
 date: 2022-02-27 15:38:25
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

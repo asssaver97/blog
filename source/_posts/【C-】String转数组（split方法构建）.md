@@ -1,8 +1,7 @@
 ---
 title: 【C++】String转数组（split方法构建）
 date: 2022-03-03 12:30:52
-tags: 基础知识
-categories: C++
+tags: C++
 ---
 思路是istringstream配合getline使用。
 

@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer07.重建二叉树
 date: 2022-01-24 17:02:55
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

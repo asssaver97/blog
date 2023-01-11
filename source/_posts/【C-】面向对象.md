@@ -1,8 +1,8 @@
 ---
 title: 【C++】面向对象
 date: 2022-03-04 14:06:50
-tags: 八股文
-categories: C++
+tags: C++
+categories: 八股文
 ---
 什么是面向对象？面向对象的三大特性
 ---

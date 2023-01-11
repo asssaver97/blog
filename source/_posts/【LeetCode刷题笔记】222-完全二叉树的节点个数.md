@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】222.完全二叉树的节点个数
 date: 2022-03-03 11:17:59
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

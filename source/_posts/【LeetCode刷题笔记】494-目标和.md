@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】494.目标和
 date: 2022-03-02 11:13:03
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指OfferII101.分割等和子集
 date: 2022-03-01 11:20:12
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

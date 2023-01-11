@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】1792.最大平均通过率
 date: 2022-04-05 23:29:01
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

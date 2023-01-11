@@ -1,8 +1,8 @@
 ---
 title: 【读书笔记】《C++PrimerPlus》
 date: 2022-03-24 13:07:11
-tags: 读书笔记
-categories: C++
+tags: C++
+categories: 读书笔记
 ---
 预备知识
 ---

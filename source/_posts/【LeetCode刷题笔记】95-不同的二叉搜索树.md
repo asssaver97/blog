@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】95.不同的二叉搜索树
 date: 2022-02-20 21:43:08
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

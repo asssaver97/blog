@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】1332.删除回文子序列
 date: 2022-01-22 10:18:08
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

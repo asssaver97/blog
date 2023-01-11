@@ -1,8 +1,7 @@
 ---
 title: Markdown教程
 date: 2022-01-12 18:14:22
-tags: 基础知识
-categories: Markdown
+tags: Markdown
 ---
 标题格式
 ---

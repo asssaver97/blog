@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer12.矩阵中的路径
 date: 2022-01-25 10:11:51
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

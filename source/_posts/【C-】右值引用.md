@@ -1,8 +1,7 @@
 ---
 title: 【C++】右值引用
 date: 2022-09-02 17:01:27
-tags: 基础知识
-categories: C++
+tags: C++
 ---
 C++左值和右值
 ---

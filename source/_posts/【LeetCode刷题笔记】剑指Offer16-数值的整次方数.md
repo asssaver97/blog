@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer16.数值的整次方数
 date: 2022-01-25 20:54:56
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

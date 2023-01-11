@@ -1,8 +1,8 @@
 ---
 title: 【C++】编译内存
 date: 2022-03-03 17:33:19
-tags: 八股文
-categories: C++
+tags: C++
+categories: 八股文
 ---
 C++程序编译过程
 ---

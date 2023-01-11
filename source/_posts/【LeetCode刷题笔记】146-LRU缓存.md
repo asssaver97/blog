@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】146.LRU缓存
 date: 2022-02-19 11:54:24
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

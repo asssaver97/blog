@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer30.包含min函数的栈
 date: 2022-01-28 12:18:36
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

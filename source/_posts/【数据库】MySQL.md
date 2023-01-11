@@ -1,8 +1,8 @@
 ---
 title: 【数据库】MySQL
 date: 2022-03-06 16:19:16
-tags: 八股文
-categories: 数据库
+tags: 数据库
+categories: 八股文
 ---
 数据库索引的实现原理（B+树）
 ---

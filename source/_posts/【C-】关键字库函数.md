@@ -1,8 +1,8 @@
 ---
 title: 【C++】关键字库函数
 date: 2022-03-06 13:37:20
-tags: 八股文
-categories: C++
+tags: C++
+categories: 八股文
 ---
 strlen和sizeof的区别
 ---

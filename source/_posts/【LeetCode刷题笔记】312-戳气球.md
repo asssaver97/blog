@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】312.戳气球
 date: 2022-02-28 17:41:09
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

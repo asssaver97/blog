@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer26.树的子结构
 date: 2022-01-28 10:36:20
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

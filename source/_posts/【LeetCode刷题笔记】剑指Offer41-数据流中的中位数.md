@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer41.数据流中的中位数
 date: 2022-01-31 14:25:42
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

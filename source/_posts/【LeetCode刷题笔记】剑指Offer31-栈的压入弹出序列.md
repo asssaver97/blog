@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer31.栈的压入弹出序列
 date: 2022-01-28 17:15:13
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 ---
 题目
 ---

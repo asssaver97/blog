@@ -1,8 +1,8 @@
 ---
 title: 【LeetCode刷题笔记】剑指Offer20.表示数值的字符串
 date: 2022-01-26 11:09:43
-tags: 刷题
-categories: LeetCode
+tags: 算法
+categories: 刷题笔记
 mathjax: true
 ---
 题目

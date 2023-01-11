@@ -1,8 +1,8 @@
 ---
 title: 【计算机网络】应用层：HTTP和HTTPS
 date: 2022-02-20 15:57:17
-tags: 八股文
-categories: 计算机网络
+tags: 计算机网络
+categories: 八股文
 mathjax: true
 ---
 HTTP协议的特点
