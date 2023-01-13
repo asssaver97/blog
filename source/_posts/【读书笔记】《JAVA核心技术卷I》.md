@@ -2303,5 +2303,99 @@ java -ea:MyClass -ea:com.mycompany.mylib MyApp
 java -ea:... -da:MyClass MyApp
 ```
 
+### 日志
 
+> P304
 
+新手程序员都很熟悉在有问题的代码中插入一些 `System.out.println` 方法来帮助观察程序的这种操作，但是一旦解决问题以后就要将这些 `print` 语句删除，接下来又出现问题就需要再插入几个 `print` 语句，这种反反复复的删改语句的行为很是麻烦。Java 中的日志 API就是为了解决这个问题的，它有如下优点：
+
+* 可以轻松取消全部日志记录，或者仅仅取消某个级别以下的日志，同样的如果想要再次打开日志开关也很容易。
+* 可以很简单地禁止日志记录。
+* 日志记录可以被定向到不同的处理器，如控制台显示、写至文件，等等。
+* 日志记录器和处理器都可以对记录进行过滤。
+* 日志记录可以采用不同的方式格式化，例如纯文本或 XML。
+* 应用程序可以使用多个日志记录器，它们使用与包名类似的有层次结构的名字，例如，com.mycompany.myapp。
+* 日志系统的配置由配置文件控制。
+
+#### 基本日志
+
+> p305
+
+要生成简单的日志记录，可以使用*全局日志记录器*（global logger）并调用其 `info` 方法：
+
+```java
+Logger.getGlobal().info("some infos")
+```
+
+如果在合适的地方（如 `main` 的最前面）调用
+
+```java
+Logger.getGlobal().setLevel(Level.OFF);
+```
+
+将会取消所有日志。
+
+#### 高级日志
+
+> p305
+
+如果不想所有的日志都记录到一个全局日志记录器中，你可以定义自己的日志记录器，具体地，调用 `getLogger` 方法创建或获取日志记录器：
+
+```java
+private static final Logger mylogger = Logger.getLogger("com.mycompany.myapp");
+```
+
+日志记录器的层次性比包名的**更强**，包与父包之间没有语义关系，但是日志记录器的父与子之间将共享某些属性。例如，如果对日志记录器“com.mycompany”设置了日志级别，它的子日志记录器也会继承这个级别。
+
+通常有以下 7 个日志级别：
+
+1. SEVERE
+2. WARNING
+3. INFO
+4. CONFIG
+5. FINE
+6. FINER
+7. FINEST
+
+在默认情况下，只记录前 3 个级别。也可以设置一个不同的级别，例如：
+
+```java
+logger.setLevel(Level.FINE);  // 现在，FINE 以及所有更高级别的日志都会被记录
+logger.setLevel(Level.ALL);  // 开启所有级别的日志记录
+logger.setLevel(Level.OFF);  // 关闭所有级别的日志记录
+```
+
+所有级别都可以分开记录日志，例如：
+
+```java
+logger.warning(message);
+logger.fine(message);
+```
+
+或者用 `log` 方法记录并指定级别，例如：
+
+```java
+logger.log(Level.FINE, message);
+```
+
+## 泛型程序设计
+
+### 为什么要使用泛型程序设计
+
+*泛型程序设计*（generic programming）意味着编写的代码可以对多种不同类型的对象重用。
+
+#### 类型参数的好处
+
+> p327
+
+*类型参数*（type parameter）用来指示元素的类型。
+
+不用类型参数时：
+
+```java
+ArrayList files = new ArratList();
+. . .
+String filename = (String) files.get(0);
+```
+
+* 当获取一个值时必须进行强制类型转换。
