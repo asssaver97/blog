@@ -6,14 +6,27 @@ categories: 读书笔记
 ---
 [Java 在线 API 文档](http://docs.oracle.com/javase/9/docs/api)
 
-Java的基本程序设计结构
+## Java 程序设计环境
+
+### 使用命令行工具
+
+```shell
+javac Welcome.java
+java Welcome
+```
+
+`javac` 程序是一个 Java 编译器，它将文件 Welcome.java 编译成 Welcome.class。`java` 程序启动 Java 虚拟机，虚拟机执行编译器编译到类文件中的字节码。
+
+<!--more-->
+
+Java 的基本程序设计结构
 ---
+
 ### 数据类型
 #### char 类型
 > p32
 
 char 类型原本用于表示单个字符，**不过现在不一样了**。如今，有些 Unicode 字符可以用一个 char 值描述，而另外一些 Unicode 字符则需要两个 char 值。
-<!--more-->
 
 ### 变量与常量
 #### 枚举类型
@@ -264,7 +277,7 @@ PrintWriter out = new PrintWriter("myfile.txt", StandardCharsets.UTF_8);
 #### 块作用域
 > p63
 
-*块（block）*是指由若干条 Java 语句组成的语句，并用一对大括号括起来（**也就是说，大括号可以单独成对使用，不必搭配语句**）。块确定了变量的作用域。一个块可以*嵌套*在另一个块中，但**不能在嵌套的两个块中声明同名的变量**。
+*块*（block）是指由若干条 Java 语句组成的语句，并用一对大括号括起来（**也就是说，大括号可以单独成对使用，不必搭配语句**）。块确定了变量的作用域。一个块可以*嵌套*在另一个块中，但**不能在嵌套的两个块中声明同名的变量**。
 
 #### 多重选择：switch 语句
 > p72
@@ -285,13 +298,13 @@ switch (choice)
 }
 ```
 
-case 标签可以是：
+`case` 标签可以是：
 
 * 类型为 char、byte、short 或 int 的常量表达式；
 * 枚举常量；
-* 从 Java 7 开始，case 标签还可以是字符串字面量。
+* 从 Java 7 开始，`case` 标签还可以是字符串字面量。
 
-在 switch 语句中使用枚举常量时，不必在每个标签中指明枚举名，可以由 switch 的表达式值推导出，例如：
+在 `switch` 语句中使用枚举常量时，不必在每个标签中指明枚举名，可以由 `switch` 的表达式值推导出，例如：
 
 ```java
 enum Size {SMALL, MEDIUM, LARGE, EXTRA_LARGE};
@@ -323,7 +336,7 @@ while (. . .)
 }
 ```
 
-**NOTE：**事实上，可以将标签应用到任何语句，甚至可以将其应用到 if 语句或者块语句上，但不建议这么使用。
+**NOTE：**事实上，可以将标签应用到任何语句，甚至可以将其应用到 `if` 语句或者块语句上，但不建议这么使用。
 
 ### 大数
 > p76
@@ -2091,4 +2104,188 @@ class FileFormatException extends IOException
   }
 }
 ```
+
+### 捕获异常
+
+#### 捕获异常
+
+> p286
+
+要捕获一个异常，需要设置 `try/catch` 语句块：
+
+```java
+try
+{
+  // code
+  // more code
+  // more code
+}
+catch (ExceptionType e)
+{
+  // handler for this type
+}
+```
+
+* 如果 `try` 语句块中的任何代码抛出了 `catch` 子句中指定的一个异常类，那么
+  1. 程序将跳过 `try` 语句块的其余代码。
+  2. 程序将执行 `catch` 子句中的处理器代码。
+* 如果 `try` 语句块中的代码没有抛出任何异常，那么程序将跳过 `catch` 子句。
+* 如果方法中的任何代码抛出了 `catch` 子句中没有声明的一个异常类型，那么这个方法就会立刻退出。
+
+**QUESTION：**如果选择抛出异常还是捕获异常？
+
+> 一般经验是，要捕获那些你知道如何处理的异常，而继续传播（即抛出）那些你不知道怎么处理的异常。但是有个例外：如果编写一个方法覆盖超类的方法，而这个超类没有抛出异常，你就必须捕获你的方法代码中出现的每一个检查型异常。
+
+#### 捕获多个异常
+
+> p288
+
+为每个异常类型使用一个单独的 `catch` 子句，如果捕获后的动作一样，可以在同一个 `catch` 子句中可以捕获多个异常类型。例如：
+
+```java
+try
+{
+  // code that might throw exceptions
+}
+catch (FileNotFoundException | UnknownHostException e)
+{
+  // emergency action for missing files and unknown hosts
+}
+catch (IOException)
+{
+  // emergency action for all other I/O problems
+}
+```
+
+异常对象可能包含有关异常性质的信息。使用 `e.getMessage()` 可以得到详细的错误消息，或者使用 `e.getClass().getName()` 得到异常对象的实际类型。
+
+#### 再次抛出异常与异常链
+
+> p289
+
+可以在`catch` 子句中抛出一个异常。
+
+#### finally 子句
+
+> p290
+
+不管是否有异常被捕获，`finally`子句中的代码都会被执行。
+
+```java
+try
+{
+  // code
+  // more code
+  // more code
+}
+catch (ExceptionType e)
+{
+  // handler for this type
+}
+finally
+{
+  // clean resources
+}
+```
+
+**NOTE：**不要把改变控制流的语句（return，throw，break，continue）放在 `finally` 子句中！
+
+#### try-with-Resources 语句
+
+> p292
+
+Try-with-resorces 语句（带资源的 `try` 语句）的最简形式为：
+
+```java
+try (Resource res = . . .)
+{
+  // work with res
+}
+```
+
+`try` 块退出时，会自动调用 `res.close()`，还可以指定多个资源。例如：
+
+```java
+try (var in = new Scanner(new FileInputStream("words.txt"), StandardCharsets.UTF_8);
+    var out = new PrinterWriter("out.txt", StandardCharsets.UTF_8))
+{
+  while (in.hasNext())
+    System.out.println(in.next());
+}
+```
+
+不管这个块如何退出，都会自动调用 `in.close()` 和 `out.close()`，就好像用了 `finally` 块一样。
+
+### 使用异常的技巧
+
+> p297
+
+1. **异常处理不能代替简单的测试。**捕获异常花费的时间远超过简单的测试，因此我们必须遵循：只在异常情况下使用异常。
+2. **不要过分地细化异常。**很多程序员习惯将每一条语句都分装在一个独立的 `try` 语句块中，这会导致代码量急剧膨胀，因此我们有必要将**整个任务**包在一个 `try` 语句块中。
+3. **充分利用异常层次结构。**
+   * 不要只抛出 RuntimeException 异常。应该寻找一个合适的子类或创建自己的异常类。
+   * 不要只捕获 Throwable 异常，否则会使你的代码更难读、更难维护。
+   * 充分考虑检查型异常和非检查型异常的区别。
+   * 如果可以，应该将一种异常转化为另一种更加合适的异常。
+4. **不要压制异常。**
+5. **在检测错误时，苛刻比放任更好。**不要用返回一个虚拟值来代替抛出一个异常。
+6. **不要羞于传递异常。**
+
+### 使用断言
+
+#### 断言的概念
+
+> p300
+
+断言机制允许在测试期间向代码中插入一些检查，而在生产代码中会自动删除这些检查。
+
+Java 引入了关键字 `assert`，这个关键字有两种形式
+
+1. ```java
+   assert condition;
+   ```
+
+2. ```java
+   assert condition : expression;
+   ```
+
+这两个语句都会计算条件，如果结果为 false，则会抛出一个 AssertionError 异常。在第二个语句中，表达式将传入 AssertionError 对象的构造器，并转换为一个消息字符串。AssertionError 对象并不存储具体的表达式值，因此无法在之后得到这个表达式值。
+
+例如，要想断言 x 是一个非负数，只需要使用下面这条语句
+
+```java
+assert x >= 0;
+```
+
+如果还想将 x 的实际值传递给 AssertionError 对象，以便日后显示，那么就要写成
+
+```java
+assert x >= 0 : x;
+```
+
+**C++ NOTE：**C 语言中的 `assert` 宏将断言中的条件转换成一个字符串，当断言失败时，就会打印这个字符串，例如，若 `assert(x >= 0);` 失败，那么将打印出失败条件 “x >= 0”。但是在 Java 中，条件并不会自动地成为错误报告的一部分，如果希望看到这个条件，就必须将它以字符串的形式传递给 AssertionError 对象：`assert x >= 0 : "x >= 0"`。
+
+#### 启用和禁用断言
+
+> p301
+
+启用或禁用断言是*类加载器*（class loader）的功能。在默认情况下，断言是禁用的。可以在运行程序时用 `-enableassertions` 或 `-ea` 选项启用断言：
+
+```shell
+java -enableassertions MyApp
+```
+
+也可以在某个类或整个包中启用断言，例如：
+
+```shell
+java -ea:MyClass -ea:com.mycompany.mylib MyApp
+```
+
+也可以用选项 `-disableassertions` 或 `-da` 在某个特定类和包中禁用断言：
+
+```shell
+java -ea:... -da:MyClass MyApp
+```
+
+
 
