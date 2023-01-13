@@ -2393,9 +2393,20 @@ logger.log(Level.FINE, message);
 不用类型参数时：
 
 ```java
-ArrayList files = new ArratList();
+ArrayList files = new ArrayList();
 . . .
 String filename = (String) files.get(0);
 ```
 
 * 当获取一个值时必须进行强制类型转换。
+* 没有错误检查。
+
+使用类型参数时：
+
+```java
+var files = new ArrayList<String>();
+```
+
+* 更易读。
+* 更安全。
+
