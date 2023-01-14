@@ -2494,4 +2494,82 @@ String middle = ArrayAlg.<String>getMiddle("John", "Q.", "Public");
 <T extends Cpmparable & Serializable>
 ```
 
-**最多**有一个类型可以是类，而且它必须是限定列表中的第一个限定。
+**最多**有一个类型可以是类，而且它必须是限定列表中的**第一个**限定。
+
+### 泛型代码和虚拟机
+
+虚拟机没有泛型类型对象——所有对象都属于普通类，所有编译器会“擦除”类型参数。
+
+#### 类型擦除
+
+> p333
+
+无论何时定义一个泛型类型，都会自动提供一个相应的*原始类型*（raw type），类型变量会被*擦除*（erased），并替换为**第一个**限定类型，如果没有限定类型，则替换为 Object。
+
+**C++ NOTE：**Java 泛型与 C++ 模板在这点上有很大的区别。C++ 会为每个模板的实例化产生不同的类型，这一现象被称为“模板代码膨胀”。Java 则不存在这个问题。
+
+### 限制与局限性
+
+#### 不能用基本类型实例化类型参数
+
+> p338
+
+不能用基本类型代替类型参数，例如，没有 `Pair<double>`，只有 `Pair<Double>`。原因就是类型擦除。
+
+#### 运行时类型查询只适用于原始类型
+
+> p338
+
+所有的类型查询（`instanceof`、`getClass` 和强制类型转换）只产生原始类型。例如：
+
+```java
+if (a instanceof Pair<String>)  // ERROR! 仅仅是测试 a 是否是任意类型的一个 Pair
+  
+if (a instanceof Pair<T>)  // ERROR!! 同上
+  
+Pair<String> p == (Pair<String>) a;  // warning--can only tesy that a is a Pair
+
+Pair<String> stringPair = . . .;
+Pair<Employee> employeePair = . . .;
+if (stringPair.getClass() == employeePair.getClass())  // always true
+```
+
+总结：
+
+* 对泛型类使用 `instanceof` 时，编译器会报错。
+* 对泛型类使用强制类型转换时，会得到一个警告。
+* 对泛型类使用 `getClass` 时，始终返回原始类型，例如 `Pair.class`。
+
+#### 不能创建参数化类型的数组
+
+> p338
+
+不能实例化参数化类型的数组，例如：
+
+```java
+var table = new Pair<String>[10];  // ERROR!
+```
+
+原因仍在类型擦除，擦除之后 table 的类型是 pair[]，会导致即使存放了不同参数类型的 Pair 实例也会被允许，因此干脆直接禁止创建参数化类型的数组。
+
+可以用 `ArrayList<Pair<String>>` 创建。
+
+#### Varargs 警告
+
+> p339
+
+考虑一个向参数个数可变的方法传递一个泛型类型的实例，例如：
+
+```java
+public static <T> void addAll(Collection<T> coll, T... ts)
+{
+  for (T t : ts) coll.add(t);
+}
+```
+
+实际上参数 ts 是一个数组，包含提供的所有实参，这也意味着如果要调用该方法，Java 虚拟机就必须建立一个 `Pair<String>` 数组，这就违反了上一章的规则。但是在这种情况下，Java 的规则有所放松，你只会得到一个警告，而不是报错。
+
+可以采用两种方法来抑制这个警告：
+
+* 为所有包含 `addAll` 调用的方法增加注解 `@SuppressWarnings("unchecked")`
+* 在 Java 7 中，可以用 `@SafeVarargs` 直接注解 `addAll` 方法。但是要注意的是 **`@SafeVarargs` 只能用于声明为 `static`、`final` 或（Java 9 中）`private` 的构造器和方法**，所有其他的方法都可能被覆盖，导致这个注解没什么意义。
