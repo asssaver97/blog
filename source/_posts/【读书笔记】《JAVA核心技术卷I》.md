@@ -2476,3 +2476,22 @@ class ArrayAlg
 String middle = ArrayAlg.<String>getMiddle("John", "Q.", "Public");
 ```
 
+### 类型变量的限定
+
+> p331
+
+可以对类型变量 `T` 设置一个*限定*（bound）：
+
+```java
+<T extends BoundingType>
+```
+
+表示 `T` 应该是*限定类型*（bounding type）的*子类型*（subtype）。T 和 限定类型可以是类，也可以是接口。选择关键字 `extends` 是因为它更接近子类型的概念，并且 Java 的设计者也不打算在语言中再添加一个新的关键字。
+
+一个类型变量或通配符可以有多个限定，限定类型之间用 `&` 隔开，类型变量之间用 `,` 隔开。例如：
+
+```java
+<T extends Cpmparable & Serializable>
+```
+
+**最多**有一个类型可以是类，而且它必须是限定列表中的第一个限定。
