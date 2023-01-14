@@ -2300,7 +2300,7 @@ java -ea:MyClass -ea:com.mycompany.mylib MyApp
 也可以用选项 `-disableassertions` 或 `-da` 在某个特定类和包中禁用断言：
 
 ```shell
-java -ea:... -da:MyClass MyApp
+java -ea:. . . -da:MyClass MyApp
 ```
 
 ### 日志
@@ -2409,4 +2409,70 @@ var files = new ArrayList<String>();
 
 * 更易读。
 * 更安全。
+
+### 定义简单泛型类
+
+> p328
+
+*泛型类*（generic class）就是有一个或多个类型变量的类。例如：
+
+```java
+public class Pair<T>
+{
+  public T first;
+  public T second;
+  
+  public Pair()
+  {
+    first = null;
+    second = null;
+  }
+  
+  public Pair(T first, T second)
+  {
+    this.first = first;
+    this.second = second;
+  }
+  
+  public T getFirst() { return first; }
+  public T getSecond() { return second; }
+  
+  public void setFirst(T newValue) { first = newValue; }
+  public void setSecond(T newValue) { second = newValue; }
+}
+```
+
+也可以引入多个类型变量，例如：
+
+```java
+public class Pair<T, U> { . . . }
+```
+
+**NOTE：**Java 库使用变量 E 表示集合的元素类型，K 和 V 分别表示表的键和值。T（必要时还可以用相邻的字母 U 和 S）表示“任意元素”。
+
+可以用具体的类型替换类型变量来*实例化*（instantiate）泛型类型，例如：`Pair<String>`
+
+### 泛型方法
+
+> p330
+
+还可以顶一个带有类型参数的方法。例如：
+
+```java
+class ArrayAlg
+{
+  public static <T> T getMiddle(T... a)
+  {
+    return a[a.length / 2];
+  }
+}
+```
+
+类型变量 `<T>` 放在修饰符（这里是 `public static`）的后面，并放在返回类型的前面。泛型方法可以在普通类中定义，也可以在泛型类中定义。
+
+当调用一个泛型方法时，可以把具体类型包围在尖括号中，放在方法名前面。例如：
+
+```java
+String middle = ArrayAlg.<String>getMiddle("John", "Q.", "Public");
+```
 
