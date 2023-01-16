@@ -2510,6 +2510,17 @@ String middle = ArrayAlg.<String>getMiddle("John", "Q.", "Public");
 
 ### 限制与局限性
 
+* 不能用基本类型实例化类型参数。
+* 运行时类型查询只适用于原始类型。
+* 不能创建参数化类型的数组。
+* Varargs 警告。
+* 不能实例化类型参数。
+* 不能构造泛型参数。
+* 泛型类的静态上下文类型变量无效。
+* 不能抛出或捕获泛型类的实例。
+* 可以取消对检查型异常的检查。
+* 注意擦除后的冲突。
+
 #### 不能用基本类型实例化类型参数
 
 > p338
@@ -2573,3 +2584,169 @@ public static <T> void addAll(Collection<T> coll, T... ts)
 
 * 为所有包含 `addAll` 调用的方法增加注解 `@SuppressWarnings("unchecked")`
 * 在 Java 7 中，可以用 `@SafeVarargs` 直接注解 `addAll` 方法。但是要注意的是 **`@SafeVarargs` 只能用于声明为 `static`、`final` 或（Java 9 中）`private` 的构造器和方法**，所有其他的方法都可能被覆盖，导致这个注解没什么意义。
+
+#### 不能实例化类型变量
+
+> p340
+
+不能在类似 `new T(. . .)` 的表达式中使用类型变量。例如，下面的 `Pair<T>` 构造器就是非法的：
+
+```java
+public Pair() { first = new T(); second = new T(); }  // ERROR!
+```
+
+类型擦除将 T 变成 Object，而你肯定不希望调用 `new Object()`。
+
+#### 泛型类的静态上下文中类型变量无效
+
+> p342
+
+不能在静态字段或方法中引用静态变量。
+
+### 泛型类型的继承规则
+
+> p346
+
+无论 `S` 和 `T` 是什么关系，`Pair<S>` 与 `Pair<T>` 都**没有**任何关系。例如 `Employee` 是` Manager` 的超类，但是 `Pair<Manager>` 和 `Pair<Employee>` 之间没有任何关系。因此也不能类型转换。
+
+泛型类可以扩展或实现其他的泛型类。例如，`ArrayList<T>` 实现了 `List<T>` 接口，那么一个 `ArrayList<Manager>` 可以转换为一个 `List<Manager>`。
+
+### 通配符类型
+
+#### 通配符概念
+
+> p348
+
+在通配符类型中，允许类型参数发生变化。例如，
+
+```java
+Pair<? extends Employee>
+```
+
+表示任何泛型 `Pair` 类型，它的类型参数是 `Employee` 的子类，如 `Pair<Manager>`，但不能是 `Pair<String>`。
+
+**NOTE：**占位符 `T` 代表一个明确的类型，在我们需要知道实际类型的地方，我们需要能够推算出它。相反，通配符 `?` 表示任何类型，我永远不需要也不能知道这个类型是什么。你可以使用 `extends` 和 `super`  来限制通配符，但是没有办法得到实际的类型。
+
+对于子类型限定来说，由于不能确定对象的具体类型，所以**无法写入**。
+
+#### 通配符的超类型限定
+
+> p349
+
+通配符限定与类型变量限定十分相似，但是通配符限定有一个额外的能力，就是可以指定一个*超类型限定*（supertype bound），如下所示：
+
+```java
+? super Manager
+```
+
+这一通配符限制为 `Manager` 的所有超类型。
+
+通俗来讲，**带有超类型限定的通配符允许你写入一个泛型对象（只写），而带有子类型限定的通配符允许你读区一个泛型对象（只读）。**
+
+#### 通配符捕获
+
+> p352
+
+通配符不是类型变量，因此不能在编写代码时使用 `?` 作为一种类型。例如以下代码是错误的：
+
+```java
+public static void swap(Pair<?> p)
+{
+  ? t = p.getFirst();  // ERROR!!
+  p.setFirst(p.getSecond());
+  p.setSecond(t);
+}
+```
+
+我们可以通过类型参数 `T` 来*捕获通配符*。例如：
+
+```java
+public static void swap(Pair<?> p)
+{
+  swapHelper(p);
+}
+
+public static void swapHelper(Pair<T> p)
+{
+  T t = p.getFirst(); 
+  p.setFirst(p.getSecond());
+  p.setSecond(t);
+}
+```
+
+### 反射和泛型
+
+#### 虚拟机中的泛型类型信息
+
+> p356
+
+例：
+
+```java
+public static <T extends Comparable<? super T>> T min(T[] a)
+```
+
+擦除以后得到：
+
+```java
+public static Comparable min(Comparable[] a)
+```
+
+为了表述泛型类型声明，可以使用 java.lang.reflect 包中的接口 Type。这个借口包含以下子类型：
+
+* Class 类，描述具体类型。
+* TypeVariable 接口，描述类型变量。例如 `T extends Comparable<? super T>`。
+* WildcardType 接口，描述通配符。例如 `? super T`。
+* ParameterizedType 接口，描述泛型类或接口类型。例如 `Comparable<? super T>`。
+* GenericArratType 接口，描述泛型数组。例如 `T[]`。
+
+## 集合
+
+### Java集合框架
+
+#### 集合接口与实现分离
+
+> p365
+
+与现代的数据结构类库的常见做法一样，Java 集合类库也将*接口*（interface）与*实现*（implementation）分离。
+
+在研究 API 文档时，会发现另外一组名字以 Abstract 开头的类，例如，`AbstractQueue`。这些类是为类库实现者设计的，如果想要实现自己的队列类，会发现扩展 `AbstractQueue` 类要比实现 `Queue` 接口中的所有方法轻松得多。
+
+#### Collection 接口
+
+> p368
+
+在 Java 类库中，集合类的基本接口是 `Collection` 接口。这个接口有两个基本方法：
+
+```java
+public interface Collection<E>
+{
+  boolean add(E element);  // 添加元素
+  Iterator<E> iterator();  // 迭代
+  . . .
+}
+```
+
+#### 迭代器
+
+> p368
+
+`Iterator` 接口包含四个方法：
+
+```java
+public interface Iterator<E>
+{
+  E next();
+  boolean hasNext();
+  void remove();
+  default void forEachRemaining(Consumer<? super E> action);
+}
+```
+
+
+
+## 图形用户界面程序设计
+
+## Swing 用户界面组件
+
+## 并发
