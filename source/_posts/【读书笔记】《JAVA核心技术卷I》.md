@@ -2739,11 +2739,85 @@ public interface Iterator<E>
   E next();
   boolean hasNext();
   void remove();
-  default void forEachRemaining(Consumer<? super E> action);
+  default void forEachRemaining(Consumer<? super E> action);  // Consumer 是常用函数式接口
 }
 ```
 
+`forEachRemaining` 可以不用循环而遍历任何集合，只需要提供一个 lambda 表达式，将对迭代器的每一个元素调用这个 lambda 表达式。
 
+```java
+iterator.forEachRemaining(element -> do something with element);
+```
+
+**C++ NOTE：**在 C++ 标准模板库中，迭代器是根据数组索引建模的，可以通过数组索引 i 查找数组元素，也可以通过调用 `i++` 将数组索引向前移动。但是 Java 迭代器的查找操作与位置变更更紧密耦合，**迭代器查找一个元素的唯一方法是调用 `next`**。因此可以认为 Java 迭代器**位于两个元素之间**。
+
+`Iterator` 接口的 `remove` 方法将会删除上次调用 `next` 方法时返回的元素，且 `next` 方法和 `remove` 方法调用之间存在依赖性，如果调用 `remove` 之前不调用 `next` 将是**不合法的**。
+
+```java
+Iterator<String> it = c.iterator();
+it.next();
+it.remove;
+it.next();  // must do it!
+it.remove();
+it.remove();  // ERROR!
+```
+
+#### 泛型使用方法
+
+> p371
+
+`Collection` 接口声明了很多有用的方法，所有的实现类都必须提供这些方法，下面列举了其中一部分：
+
+```java
+int size();
+boolean isEmpty();
+boolean contains(Object obj);
+boolean containsAll(Collection<?> c);
+boolean equals(Object other);
+boolean addAll(Collection<? extends E> from);
+boolean remove(Object obj);
+boolean removeAll(Collection<?> c);
+void clear();
+```
+
+如果实现 `Collection` 接口的每一个类都要提供那么多的例行方法，这将是一件很烦人的事情，为了能够让实现者更容易地实现这个接口，Java 类库提供了一个类 `AbstractCollection`，它保持基础方法 `size` 和 `iterator` 仍为抽象方法，但是为实现者实现了其他例行方法。
+
+### 集合框架中的接口
+
+> p373
+
+Java 集合框架为不同类型的集合定义了大量接口，如下图所示：
+
+![](/Users/asssaver/github/blog/source/images/20230117/1.jpeg)
+
+集合有两个基本接口：`Collection` 和 `Map`。`Map` 中的插入和读取方法为：
+
+```java
+V put(K key, V value);
+V get(K key);
+```
+
+`List` 是一个*有序集合*（ordered collection），元素会增加到容器中的特定位置。可以采用两种方式访问元素：
+
+* 使用迭代器访问。
+* 使用一个整数索引来访问。
+
+后者也被称为*随机访问*（random access），代表着可以按任意顺序访问元素，而迭代器必须顺序地访问元素。`List` 接口定义了多个用于随机访问的方法：
+
+```java
+void add(int index, E element);
+void remove(int index);
+E get(int index);
+E set(int index, E element);
+```
+
+`ListIterator` 接口是 `Iterator` 的一个子接口。它定义了一个方法用于在迭代器位置前面增加一个元素：
+
+```java
+void add(E element);
+```
+
+`Set` 接口等同于 `Collection` 接口，但是其方法的行为有更严谨的定义。之所以要在 `Collection` 接口外建立一个单独的接口 `Set`，是因为从概念上讲并不是所有集合都是集，建立一个 `Set` 接口可以允许程序员编写只接受集的方法。
 
 ## 图形用户界面程序设计
 
