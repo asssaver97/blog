@@ -3145,6 +3145,81 @@ String[] values1 = staff.toArray(new String[0]);  // 集合转数组
 
 ## 图形用户界面程序设计
 
+### 显示窗体
+
+在 Java 中，顶层窗口（就是没有包含在其他窗口中的窗口）被称为*窗体*（frame）。
+
+#### 创建窗体
+
+> p431
+
+```java
+package simpleframe;
+
+import java.awt.*;
+import javax.swing.*;  // 包名javax表示这是一个Java扩展包
+
+public class SimpleFrameTest
+{
+    public static void main(String[] args)
+    {
+        EventQueue.invokeLater(() ->
+        {
+            var frame = new SimpleFrame();
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);  // 需要手动显示窗体
+        });
+    }
+}
+
+/**
+ * JFrame中默认的窗体大小是0*0像素，我们在这里定义为800*600像素，
+ * 这是SimpleFrame和JFrame的唯一区别。
+ */
+class SimpleFrame extends JFrame  
+{
+    private static final int DEFAULT_WIDTH = 800;
+    private static final int DEFAULT_HEIGHT = 600;
+
+    public SimpleFrame()
+    {
+        setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+}
+```
+
+在每个 Swing 程序中，有两个技术问题需要强调。
+
+首先，所有的 Swing 组件必须由*事件分派线程*（event dispatch thread）配置，这是控制线程，它将鼠标点击和按键等事件传递给用户接口组件。
+
+```java
+EventQueue.invokeLater(() ->
+                       {
+                         . . .
+                       });
+```
+
+其次，定义用户关闭这个窗体时的相应动作。对于上述程序而言，我们只是让程序简单地退出。
+
+```java
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+```
+
+在包含多个窗体的程序中，不能在用户关闭其中的一个窗体时就让程序退出。在默认情况下，用户关闭窗体时只是将窗体隐藏起来，而程序没有终止。
+
+#### 窗体属性
+
+> p433
+
+* `setLocation` 方法和 `setBounds` 方法用于设置窗体的位置。
+* `setIconImage` 方法用于告诉窗口系统在标题栏、任务切换窗口等位置显示那个图标。
+* `setTitle` 方法用于改变标题栏的文字。
+* `setResizable` 利用一个 boolean 值确定是否允许用户改变窗体的大小。
+
+### 在组件中显示信息
+
+
+
 ## Swing 用户界面组件
 
 ## 并发
