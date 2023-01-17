@@ -2721,7 +2721,8 @@ public static Comparable min(Comparable[] a)
 ```java
 public interface Collection<E>
 {
-  boolean add(E element);  // 添加元素
+  boolean add(E element);  // 添加元素，如果改变了集合，就返回 true，否则返回 false。
+  //例如，向 set 中添加一个元素，而这个元素已经存在，就返回 false。
   Iterator<E> iterator();  // 迭代
   . . .
 }
@@ -2818,6 +2819,90 @@ void add(E element);
 ```
 
 `Set` 接口等同于 `Collection` 接口，但是其方法的行为有更严谨的定义。之所以要在 `Collection` 接口外建立一个单独的接口 `Set`，是因为从概念上讲并不是所有集合都是集，建立一个 `Set` 接口可以允许程序员编写只接受集的方法。
+
+### 具体集合
+
+| 集合类型        | 描述                                         |
+| --------------- | :------------------------------------------- |
+| ArrayList       | 可以动态增长和缩减的一个索引序列             |
+| LinkedList      | 可以在任何位置高效插入和删除的一个有序序列   |
+| ArrayDeque      | 实现为循环数组的一个双端队列                 |
+| HashSet         | 没有重复元素的一个无序集                     |
+| TreeSet         | 一个有序集                                   |
+| EnumSet         | 一个包含枚举类型值的集                       |
+| LinkedHashSet   | 一个可以记住元素插入次序的集                 |
+| PriorityQueue   | 允许高效删除最小元素的一个集合               |
+| HashMap         | 存储键/值关联的一个数据结构                  |
+| TreeMap         | 键有序的一个映射                             |
+| EnumMap         | 键属于枚举类型的一个映射                     |
+| LinkedHashMap   | 可以记住键/值项添加次序的一个映射            |
+| WeakHashMap     | 值不会在别处使用时就可以被垃圾回收的一个映射 |
+| IdentityHashMap | 用 `==` 而不是用 `equals` 比较键的一个映射   |
+
+![](/Users/asssaver/github/blog/source/images/20230117/2.jpeg)
+
+#### 链表
+
+> p375
+
+在 Java 程序设计语言中，所有链表实际上都是*双向链表*（doubly linked）。
+
+`LinkedList.add` 方法将对象添加到链表的尾部。如果要将元素添加到链表的中间，就需要用到迭代器。集合类库提供了一个子接口 `ListIterator`，其中包含 `add` 方法：
+
+```java
+interface ListIterator<E> extends Iterator<E>
+{
+  void add(E element);
+  . . .
+}
+```
+
+与 `Collection.add` 不同，这个方法不返回 boolean 类型的值，因为它假定 `add` 操作总是会改变链表。
+
+另外，`ListIterator` 接口有两个方法，可以用来反向遍历链表：
+
+```java
+E previous();  // 对应 next()
+boolean hasPrevious();  // 对应 hasNext()
+```
+
+**NOTE：**如果调用了 `previous`，`remove` 就会删除后边的元素。
+
+`set` 方法用一个新元素替换调用 `next` 或 `previous` 方法返回的元素。
+
+链表在并发时容易出现问题，例如：一个迭代器指向一个元素前面的位置，而另一个迭代器刚刚删除了这个元素，那么前一个迭代器现在就是无效的，而且不能再使用了。链表迭代器可以检测到这种修改，并抛出 ConcurrentModificationException 异常。
+
+有一种简单的方法可以检测到并发修改。集合可以跟踪更改操作的次数，没个迭代器都会为他负责的更改操作维护一个单独的更改操作数，在没个迭代器方法的开始处，迭代器会检查它自己的更改操作数是否与集合的更改操作数相等，如果不一致，就抛出一个 ConcurrentModificationException 异常。
+
+`LinkedListed` 提供了一个用来随机访问某个特定元素的 `get` 方法，但我们不应该使用它，因为它效率**极低**。除非链表很小，这时候不需要担心 `get` 的开销，但是数据量小的时候不如使用数组或 `ArrayList`。
+
+#### 数组列表
+
+> p384
+
+`Vector` 是**同步**的，可以安全地从两个线程访问一个 `Vector` 对象，但是如果只有一个线程，代码就会在同步操作上浪费大量时间。因此建议在不需要同步时使用 `ArratList`，而不要使用 `Vector`。
+
+#### 散列集
+
+> 385
+
+链表和数组允许你根据意愿指定元素的次序，但是如果想要查看某个指定的元素又不记得它的位置，就需要访问所有元素。*散列表*（hash table）可以用于快速查找对象，它为每个对象计算一个整数，称为*散列码*（hash code）。
+
+**在 Java 中，散列表用链表数组实现。**每个列表被称为*桶*（bucket）。如果想要将元素插入桶，但桶已经被填充，这种现象被称为*散列冲突*（hash collision）。这时需要将新对象与桶中的所有对象进行比较，查看这个对象是否已经存在。如果散列表太满，就需要*再散列*（rehashed）。*装填因子*（load factor）可以确定何时对散列表进行再散列。例如，装填因子为 0.75，说明表中已经填满了 75% 以上，就会自动再散列，新表的桶数是原来的两倍。
+
+![](/Users/asssaver/github/blog/source/images/20230117/3.jpeg)
+
+#### 树集
+
+> p388
+
+树集是一个*有序集合*（sorted collection），值将自动排序。树集的底层实现是*红黑树*（red-black tree），关于红黑树的详细介绍见《算法导论》。
+
+#### 优先队列
+
+> p392
+
+*优先队列*（priority queue）没有对所有元素进行抛许，只是让最小（或最大）的元素移动到顶端。底层实现是*堆*（heap）。
 
 ## 图形用户界面程序设计
 
