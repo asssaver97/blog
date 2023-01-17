@@ -2904,6 +2904,204 @@ boolean hasPrevious();  // 对应 hasNext()
 
 *优先队列*（priority queue）没有对所有元素进行抛许，只是让最小（或最大）的元素移动到顶端。底层实现是*堆*（heap）。
 
+### 映射
+
+#### 基本映射操作
+
+> p394
+
+Java 类库为映射提供了两个通用的实现：`HashMap` 和 `TreeMap`。
+
+* 散列映射对**键**进行散列，散列和比较函数**只应用于键**，与键关联的值不进行散列或比较。
+* 树映射根据键的顺序将元素组织为一个搜索树。
+
+散列映射更快，如果不需要按照有序的顺序访问键，最好选择散列映射。
+
+使用 `put` 和 `get` 来存放和读取元素，如果映射中没有存储给定的键，`get` 将返回 `null`。或者用 `getOrDefault` 方法来返回默认值。例如：
+
+```java
+Map<String, Integer> scores = . . .;
+int score = scores.getOrDefault(id, 0);
+```
+
+`remove` 方法删除给定键对应的元素，`size` 方法返回映射中的元素数。
+
+要迭代处理映射的键和值，最容易的方法是使用 `forEach` 方法，可以提供一个接受键和值的 lambda 表达式。例如：
+
+```java
+scores.forEach((k, v) ->
+              System.out.println("key=" + k + ",value=" + v))
+```
+
+#### 更新映射条目
+
+> p397
+
+考虑使用映射统计一个单词在文件中出现的频率，对于第一次出现的单词，为了防止 `get` 方法返回 `null`，有三种补救方法：
+
+* 使用 `getOrDefault` 方法。
+
+  ```java
+  counts.put(word, counts.getOrDefault(word, 0) + 1);
+  ```
+
+* 使用 `putIfAbsent` 方法。只有当键原先不存在或映射为 `null` 时才会放入一个值。
+
+  ```java
+  counts.putIfAbsent(word, 0);
+  counts.put(word, counts.get(word) + 1);
+  ```
+
+* 使用 `merge` 方法。如果键不存在，就将 word 与 1 关联，否则使用 `Integer::sum` 函数组合原值和 1。
+
+  ```java
+  counts.merge(word, 1, Integer::sum);
+  ```
+
+#### 映射视图
+
+> p398
+
+有三种视图：
+
+* 键集。返回键集的方法为：`Set<K> keySet()`。`keySet` 返回的不是 `HashSet` 或 `TreeSet`，而是实现了 `Set` 接口的另外某个类的对象。
+* 值集合（不是一个集）。返回值集合的方法为：`Collection<V> values()`。
+* 键/值对集。返回键/值对集的方法为：`Set<Map.Entry<K, V>> entrySet()`。
+
+#### 弱散列映射
+
+> p399
+
+`WeakHashMap` 可以从长期存活的映射表中删除那些无用的值。`WeakHashMap` 使用*弱引用*（weak reference）保存键，`WeakReference` 对象将包含另一个对象的引用，在这里就是一个散列表键。如果某个对象已经没有其他人引用了，垃圾回收器会将其回收，而如果某个对象**只由 `WeakReference` 引用**，垃圾回收器也会将其回收，同时将引用这个对象的弱引用放入一个队列。`WeakHashMap` 将周期性地检查队列，并删除相关联的映射条目。
+
+#### 链接散列表与映射
+
+> p400
+
+`LinkedHashSet` 和 `LinkedHashMap` 类会记住插入元素项的顺序。以双向链表实现。
+
+#### 枚举集与映射
+
+> p401
+
+`EnumSet` 是一个枚举类型元素集的高效实现。由于枚举类型只有有限个实例，所以 `EnumSet` 内部用位序列实现，如果对应的值在集中，则相应的位被置为1。
+
+`EnumSet` 类没有公共的构造器，要用静态工厂方法构造这个集。例如：
+
+```java
+enum Weekday { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY };
+EnumSet<Weekday> always = EnumSet.allOf(Weekday.class);
+EnumSet<Weekday> never = EnmuSet.noneOf(Weekday.class);
+EnumSet<Weekday> workday = EnumSet.range(Weekday.MONDAY, Weekday.FRIDAY);
+EnumSet<Weekday> mwf = EnumSet.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY);
+```
+
+可以使用 `Set` 接口的常用方法来修改 `EnumSet`。
+
+#### 标识散列映射
+
+> p402
+
+类 `IdentityHashMap` 有特殊的用途。在这个类中，键的散列值不使用 `hashCode` 函数计算的，而是用 `System.identityHashCode` 计算的，这是根据对象的内存地址计算散列码时所使用的方法。
+
+### 视图与包装器
+
+可以使用*视图*（view）获得所有实现了 `Collection` 接口或 `Map` 接口的对象。例如，使用映射类 `keySet` 方法返回一个实现了 `Set` 接口的类对象，并用这个类的方法操纵原映射，这种集合称为视图。
+
+#### 小集合
+
+> p404
+
+Java 9 引入了一些静态方法，可以生成给定元素的集、列表或映射。例如：
+
+```java
+List<String> names = List.of("Peter", "Paul", "Mary");
+Set<Integer> numbers = Set.of(2, 3, 5);
+Map<String, Integer> scores = Map.of("Peter", 2, "Paul", 3, "Mary", 5);
+```
+
+元素、键或值**不能**为 `null`。
+
+这些集合对象是**不可修改的**。如果试图改变它们的内容，会导致一个 UnsupportedOperationException 异常。如果需要一个可更改的集合，可以把这个不可修改的集合传递到构造器。例如：
+
+```java
+var names = new ArrayList<>(List.of("Peter", "Paul", "Mary"));
+```
+
+`Collections.nCopies(n, anObject)` 静态方法会返回一个实现了 `List` 接口的**不可变**的对象，里面的元素 anObject 重复 n 次。
+
+#### 子范围
+
+> p405
+
+可以为集合建立*子范围*（subrange）视图。例如：
+
+```java
+List<Employee> group2 = staff.subList(10, 20);  // 取出第10～19个元素，即左边闭区间右边开区间。
+```
+
+**对子范围的任何操作都会反映到整个列表。**例如：`group2.clear();` 不仅会清空 group2，还会将元素自动从 staff 列表中删除。
+
+对于有序集和映射，可以使用**排序顺序**而不是元素位置来建立子范围：
+
+```java
+SortedSet<E> subSet(E from, E to);
+SortedSet<E> headSet(E to);
+SortedSet<E> tailSet(E from);
+
+SortedSet<E> subMap(K from, K to);
+SortedSet<E> headMap(K to);
+SortedSet<E> tailMap(K from);
+```
+
+Java 6 还引入了 `NavigableSet` 接口来指定是否包含边界：
+
+```java
+NavigableSet<E> subSet(E from, boolean fromInclusive, E to, boolean toInclusive);
+NavigableSet<E> headSet(E to, boolean toInclusive);
+NavigableSet<E> tailSet(E from, boolean fromInclusive);
+```
+
+#### 不可修改的视图
+
+> p405
+
+可以使用下面 8 个方法来生成集合的*不可修改视图*（unmodifiable view）：
+
+```java
+Collections.unmodifiableCollection
+Collections.unmodifiableList
+Collections.unmodifiableSet
+Collections.unmodifiableSortedSet
+Collections.unmodifiableNavigableSet
+Collections.unmodifiableMap
+Collections.unmodifiableSortedMap
+Collections.unmodifiableNavigableMap
+```
+
+#### 同步视图
+
+> p406
+
+例如，`Collections` 类的静态 `synchronizedMap` 方法可以将任何一个映射转化成有同步访问方法的 `Map`：
+
+```java
+var map = Collections.synchronizedMap(new HashMap<String, Employee>());
+```
+
+#### 检查型视图
+
+> p407
+
+检查型视图用来对泛型类型可能出现的问题提供调试支持，比如检查插入的对象类型是否正确。例如：
+
+```java
+var strings = new ArrayList<String>();
+List<String> safeStrings = Collections.checkedList(strings, String.class);
+```
+
+**NOTE：**检查型视图只能完成虚拟机可以完成的运行时检查。例如，对于 `ArrayList<Pair<String>>`，由于虚拟机有一个原始 `Pair` 类，所以无法阻止插入 `Pair<Date>`。
+
 ## 图形用户界面程序设计
 
 ## Swing 用户界面组件
