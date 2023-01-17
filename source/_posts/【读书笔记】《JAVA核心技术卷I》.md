@@ -3102,6 +3102,47 @@ List<String> safeStrings = Collections.checkedList(strings, String.class);
 
 **NOTE：**检查型视图只能完成虚拟机可以完成的运行时检查。例如，对于 `ArrayList<Pair<String>>`，由于虚拟机有一个原始 `Pair` 类，所以无法阻止插入 `Pair<Date>`。
 
+### 算法
+
+#### 批操作
+
+> p417
+
+```java
+coll1.removeAll(coll2);  // 从coll1中删除所有在coll2中出现的元素
+coll1.retainAll(coll2);  // 从coll1中删除所有未在coll2中出现的元素
+```
+
+#### 集合与数组的转换
+
+> p418
+
+```java
+String[] values = . . .;
+var staff = new HashSet<>(List.of(values));  // 数组转集合
+String[] values1 = staff.toArray(new String[0]);  // 集合转数组
+```
+
+### 遗留的集合
+
+#### 属性映射
+
+> p421
+
+*属性映射*（property map）是一个特殊类型的映射结构，它有下面三个特性：
+
+* 键与值都是字符串。
+* 这个映射可以很容易地保存到文件以及从文件加载。
+* 有一个二级表存放默认值。
+
+实现属性映射的 Java 类为 `Properties`。
+
+#### 栈
+
+> p424
+
+`Stack` 类扩展了 `Vector` 类，所以它不仅有 `push`、`pop` 和 `peek` 的栈操作方法，还有并非栈操作的 `insert` 和 `remove` 方法，可以在任何地方插入和删除值。
+
 ## 图形用户界面程序设计
 
 ## Swing 用户界面组件
