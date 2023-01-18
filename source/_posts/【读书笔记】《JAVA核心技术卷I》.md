@@ -3218,8 +3218,58 @@ frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 ### 在组件中显示信息
 
+> p435
 
+添加到窗体的所有组件都会自动添加到内容窗格中：
+
+```java
+Component c = . . .;
+frame.add(c);
+```
+
+要在一个组件上绘制，需要定义一个扩展 `JComponent` 的类，并覆盖其中的 `paintComonent` 方法，`paintComonent` 方法有一个 `Graphics` 类型的参数，`Graphics` 对象保存着用于绘制图像和文本的一组设置，例如字体或颜色。在 Java 中，所有的绘制都必须通过 `Graphics` 对象完成，其中包括了绘制图案、图像和文本的方法。
+
+`paintComonent` 方法是自动调用的，**绝不要**自己调用。
 
 ## Swing 用户界面组件
 
 ## 并发
+
+单个程序看起来在同时完成多个任务，每个人物在一个*线程*（thread）执行。
+
+进程与线程的区别：每个进程都拥有自己的一整套变量，而线程则共享数据。
+
+### 什么是线程
+
+> p553
+
+开启一个线程的步骤：
+
+1. 将执行这个任务的代码放在一个类的 `run` 方法中，这个类要实现 `Runnalbe` 接口。`Runnable` 接口非常简单，只有一个方法：
+
+   ```java
+   public interface Runnable
+   {
+     void run();
+   }
+   ```
+
+   由于 `Runnable` 是一个函数式接口，因此可以用一个 lambda 表达式创建一个实例：
+
+   ```java
+   Runnable r = () -> { task code };
+   ```
+
+2. 从这个 `Runnable` 构造一个 `Thread` 对象：
+
+   ```java
+   var t = new Thread(r);
+   ```
+
+3. 启动线程：
+
+   ```java
+   t.start();
+   ```
+
+   
