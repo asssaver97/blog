@@ -3548,3 +3548,36 @@ Java 是不满足监视器条件的，主要在以下三个方面：
 
 > p589
 
+当试图向队列添加元素而队列已满，或是想从队列移出元素而队列为空的时候，*阻塞队列*（blocking queue）将导致线程阻塞。下表给出了阻塞队列的方法：
+
+| 方法    | 正常动作                | 特殊情况下的动作                               |
+| ------- | ----------------------- | ---------------------------------------------- |
+| add     | 添加一个元素            | 如果队列满，则抛出 IllegalStateException 异常  |
+| element | 返回队头元素            | 如果队列空，则抛出 NoSuchElementException 异常 |
+| offer   | 添加一个元素并返回 true | 如果队列满，则返回 false                       |
+| peek    | 返回队头元素            | 如果队列空，则返回 null                        |
+| poll    | 移除并返回队头元素      | 如果队列空，则返回 null                        |
+| put     | 添加一个元素            | 如果队列满，则阻塞                             |
+| remove  | 移除并返回队头元素      | 如果队列空，则抛出 NoSuchElementException 异常 |
+| take    | 移除并返回队头元素      | 如果队列空，则阻塞                             |
+
+在一个多线程程序中，队列可能在任何时候变空或变满，因此，应当使用 `offer`、`poll` 和 `peek` 方法作为替代，如果不能完成任务。这些方法只是给出一个错误提示而不会抛出异常。
+
+还有带有超时时间的 `offer` 方法和 `poll` 方法。例如：
+
+```java
+boolean success = q.offer(x, 100, TimeUnit.MILLISECONDS);
+Object head = q.poll(100, TimeUnit.MILLISECONDS);
+```
+
+`BlockingQueue` 是个接口，需要使用它的实现之一来使用 `BlockingQueue`，`java.util.concurrent` 包下具有以下 `BlockingQueue` 接口的实现类：
+
+JDK 提供了 7 个阻塞队列。分别是
+
+- `ArrayBlockingQueue`：一个由数组结构组成的有界阻塞队列
+- `LinkedBlockingQueue`：一个由链表结构组成的有界阻塞队列
+- `PriorityBlockingQueue`：一个支持优先级排序的无界阻塞队列
+- `DelayQueue`：一个使用优先级队列实现的无界阻塞队列
+- `SynchronousQueue`：一个不存储元素的阻塞队列
+- `LinkedTransferQueue`：一个由链表结构组成的无界阻塞队列（实现了继承于 BlockingQueue 的 TransferQueue）
+- `LinkedBlockingDeque`：一个由链表结构组成的双向阻塞队列
