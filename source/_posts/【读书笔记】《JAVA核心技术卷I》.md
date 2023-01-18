@@ -3330,15 +3330,65 @@ frame.add(c);
 
 > p558
 
-除了已经废弃 `stop` 方法，没有办法可以**强制**终止线程。不过，`interrupt` 方法可以用来**请求**终止一个线程，线程会被设置为**中断状态**。
+除了已经废弃 `stop` 方法，没有办法可以**强制**终止线程。不过，`interrupt` 方法可以用来**请求**终止一个线程，线程会被设置为**中断状态**。被中断的线程可以决定如何响应中断。
 
-要想得出是否设置了中断状态，首先调用静态的 `Thread.currentThread` 方法获得当前线程，然后调用 `isInterrupted` 方法：
+要想得出是否设置了中断状态，首先调用静态的 `Thread.currentThread` 方法获得当前线程，然后调用 `isInterrupted` 方法。如果线程被阻塞（即 `sleep` 或 `wait` 调用），就无法检查中断状态，这里就要引入 InterruptedException 异常。例如：
 
 ```java
-while (!Thread.currentThread().isInterrupted && more work to do)
-{
-  do more work
-}
+Runnable r = () -> {
+  try
+  {
+    . . .
+      while (!Thread.currentThread().isInterrupted && more work to do)
+      {
+        do more work
+      }
+  }
+  catch(InterruptedException e)
+  {
+    // thread was interrupted during sleep or wait
+  }
+  finally
+  {
+    cleanup, if required
+  }
+  // exiting the run method terminates the thread
+};
 ```
 
-但是如果线程被阻塞，就无法检查中断状态。
+如果想不到在 `catch` 子句中执行什么，也不要置空，有两种合理的选择：
+
+* 在 `catch` 字句中调用 `Thread.currentThread().interrupt()` 来设置中断状态。这样一来调用者就可以检测中断状态。
+* 更好的选择是用 `throw InterruptedException` 抛出异常，取代 `try` 语句块。这样一来调用者就可以捕获这个异常。
+
+#### 守护线程
+
+> p561
+
+可以通过调用
+
+```java
+t.setDaemon(true);
+```
+
+将一个线程转换为*守护线程*（daemon thread）。当只剩下守护线程时，虚拟机就会退出。
+
+#### 线程名
+
+> p561
+
+默认情况下，线程又容易记的名字，如 Thread-2，但也可以用 `setName` 方法为线程设置任何名字。
+
+#### 未捕获异常的处理器
+
+> p561
+
+可以用 `setUncaughtExceptionHandler` 方法为线程安装一个处理器，也可以用 `Thread` 类的静态方法 `setDefaultUncaughtExceptionHandler` 为线程安装一个默认的处理器。处理器可以处理未捕获的异常，并使用日志 API 将报告发送到一个日志文件。
+
+#### 线程优先级
+
+> p563
+
+在 Java 程序设计语言中，每一个线程都有一个**优先级**。默认情况下，一个线程会继承构造它的那个线程的优先级。可以用 `setPriority` 方法提高或降低一个线程的优先级。
+
+线程优先级**高度依赖于系统**，当虚拟机依赖于宿主机平台的线程实现时，线程优先级会映射到宿主机平台的优先级。Linux 系统会完全忽略线程优先级——所有的线程都有相同的优先级。因此，**不要**使用线程优先级。
