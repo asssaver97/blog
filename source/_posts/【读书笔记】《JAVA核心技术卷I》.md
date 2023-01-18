@@ -3323,3 +3323,22 @@ frame.add(c);
 * 因为一个没有捕获的异常终止了 `run` 方法，是线程意外终止。
 
 虽然可以调用线程的 `stop` 方法杀死一个线程，但是该方法已经**弃用**，**不要使用它！**
+
+### 线程属性
+
+#### 中断线程
+
+> p558
+
+除了已经废弃 `stop` 方法，没有办法可以**强制**终止线程。不过，`interrupt` 方法可以用来**请求**终止一个线程，线程会被设置为**中断状态**。
+
+要想得出是否设置了中断状态，首先调用静态的 `Thread.currentThread` 方法获得当前线程，然后调用 `isInterrupted` 方法：
+
+```java
+while (!Thread.currentThread().isInterrupted && more work to do)
+{
+  do more work
+}
+```
+
+但是如果线程被阻塞，就无法检查中断状态。
