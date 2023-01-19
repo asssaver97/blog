@@ -3579,5 +3579,109 @@ JDK 提供了 7 个阻塞队列。分别是
 - `PriorityBlockingQueue`：一个支持优先级排序的无界阻塞队列
 - `DelayQueue`：一个使用优先级队列实现的无界阻塞队列
 - `SynchronousQueue`：一个不存储元素的阻塞队列
-- `LinkedTransferQueue`：一个由链表结构组成的无界阻塞队列（实现了继承于 BlockingQueue 的 TransferQueue）
+- `LinkedTransferQueue`：一个由链表结构组成的无界阻塞队列（实现了继承于 `BlockingQueue` 的 `TransferQueue`）
 - `LinkedBlockingDeque`：一个由链表结构组成的双向阻塞队列
+
+#### 高效的映射、集和队列
+
+> p595
+
+`java.util.concurrent` 包提供了映射、有序集和队列的高效实现：`ConcurrentHashMap`、`ConcurrentSkipListMap`、`ConcurrentSkipListSet` 和 `ConcurrentLinkedQueue`。
+
+这些集合使用复杂的算法，通过允许并发地访问数据结构的不同部分尽可能减少竞争。默认情况下认为可以有至多 16 个**同时运行**的书写器线程。
+
+### 任务和线程池
+
+构造一个新的线程开销很大，因为涉及到与操作系统的交互。*线程池*（thread pool）中包含了许多准备运行的线程，为线程池提供一个 `Runnable`，就会有一个线程调用 `run` 方法，当 `run` 方法退出时，这个线程**不会**死亡，而是留在池中准备为下一个请求提供服务。
+
+#### Callable 与 Future
+
+> p603
+
+`Runnable` 封装一个**没有参数和返回值**的异步方法，`Callable` 是一个有参数类型的接口，也有返回值，类型参数是返回值的类型。
+
+```java
+public interface Callable<V>
+{
+  V call() throws Exception;
+}
+```
+
+`Future` 保存异步计算的**结果**。`Future<V>` 接口有以下方法：
+
+```java
+V get();
+V get(long timeout, TimeUnit unit);
+void cancel(boolean mayInterrupt);
+boolean isCancelled();
+boolean isDone();
+```
+
+执行 `Callable` 的一种方法是使用 `FutureTask`，它实现了 `Future` 和 `Runable` 接口。例如：
+
+```java
+Callable<Integer> task = . . .;
+var futureTask = new FutureTask(task);
+var t = new Thread(futureTask);  // it's a Runnable
+t.start();
+. . .
+Integer result = task.get();  // it's a Future
+```
+
+#### 执行器
+
+> p605
+
+*执行器*（Executors）类有许多静态工厂方法用来构造线程池，如下表：
+
+| 方法                             | 描述                                                         |
+| -------------------------------- | ------------------------------------------------------------ |
+| newCachedThreadPool              | 会立即执行各个任务；如果没有可用的空闲线程，则创建一个新线程；空闲线程会保留 60 秒 |
+| newFixedThreadPool               | 池中包含固定数目的线程；空闲线程会一直保留                   |
+| newWorkStealingPool              | 一种适合“fork-join”任务的线程池，其中复杂的任务会分解为更简单的任务，空闲线程会“密取”较简单的任务 |
+| newSingleThreadExecutor          | 只有一个线程的池，会顺序地执行所提交的任务                   |
+| newScheduledThreadPool           | 用于调度执行的固定线程池                                     |
+| newSingleThreadScheduledExecutor | 用于调度执行的单线程池                                       |
+
+* 如果线程生存期很短，或者大多数时间都在阻塞，那么可以使用一个缓存线程池。
+* 为了得到最优的运行速度，并发线程数等于处理器内核数，这种情况下应当使用固定线程池。
+* 单线程执行器对于性能分析很有帮助，比如测量不使用并发的情况下应用的运行速度会慢多少。
+
+可以用下面的方法之一将 `Runnable` 或 `Callable` 对象提交给 `ExecutorService`：
+
+```java
+Future<T> submit(Callable<T> task);
+Future<?> submit(Runnable task);
+Future<T> submit(Runnable task, T result);
+```
+
+使用完一个线程池时，调用 `shutdown`。
+
+下面总结了使用连接池时所做的工作：
+
+1. 调用 `Executors` 类的静态方法 `newCachedThreadPool` 或 `newFixedThreadPool`。
+
+2. 调用 `submit` 提交 `Runnable` 或 `Callable` 对象。
+
+3. 保存好返回的 `Future` 对象，以便得到结果或者取消任务。
+4. 当不想再提交任何任务时，提交 `shutdown`。
+
+### 异步计算
+
+#### 可完成 Feature
+
+> p615
+
+当有一个 `Feature` 对象时，需要调用 `get` 来获得值，这个方法会阻塞，直到值可用。`CompletableFuture` 类实现了 `Feature` 接口，它提供了获得结果的另一种机制。你要注册一个*回调*，一旦结果可用，就会在某个线程中利用该结果调用这个回调。例如
+
+```java
+CompletableFuture<String> f = . . .;
+f.thenAccept(s -> Process the result string s);
+```
+
+### 进程
+
+当需要执行另一个程序时，可以使用 `ProcessBuilder` 和 `Process` 类。
+
+* `Process` 类在一个单独的操作系统进程中执行一个命令，允许我们与标准输入、输出和错误流交互。
+* `ProcessBuilder` 类则允许我们配置 `Process` 类。
